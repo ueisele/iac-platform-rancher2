@@ -1,0 +1,28 @@
+= Rancher 2 Platform
+
+== Documentation
+
+=== Install Rancher 2
+* https://rancher.com/docs/rancher/v2.x/en/installation/ha/create-nodes-lb/
+* https://rancher.com/docs/rancher/v2.x/en/installation/ha/create-nodes-lb/nlb/
+
+=== RKE
+* https://rancher.com/blog/2018/2018-05-14-rke-on-aws/
+* https://rancher.com/announcing-rke-lightweight-kubernetes-installer/
+* https://rancher.com/blog/2018/2018-09-26-setup-basic-kubernetes-cluster-with-ease-using-rke/
+* https://rancher.com/docs/rke/v0.1.x/en/os/
+
+=== AWS IAM
+* https://github.com/jtblin/kube2iam
+* https://github.com/errm/k8s-iam-policies
+* https://github.com/kubernetes/kops/blob/master/docs/iam_roles.md
+
+=== Networking
+* https://github.com/coreos/flannel
+* https://github.com/projectcalico/canal
+
+=== Load-Balancing
+* https://www.cloudflare.com/load-balancing/
+
+=== Certificates
+* https://letsencrypt.org/
