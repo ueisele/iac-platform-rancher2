@@ -18,17 +18,81 @@ data "aws_ami" "rancheros" {
   owners = ["605812595337"]
 }
 
-resource "aws_instance" "web" {
-  ami           = "${data.aws_ami.rancheros.id}"
-  instance_type = "t3.xlarge"
-  availability_zone = "a"
+data "template_file" "provision" {
+    template = "provision.sh"
+}
 
-  vpc_security_group_ids = ""
-  subnet_id = ""
+resource "aws_instance" "rancher-a" {
+  instance_type     = "t3.xlarge"
+  availability_zone = "us-east-2a"
+  ami               = "${data.aws_ami.rancheros.id}"
+
+  subnet_id = "${aws_subnet.rancher-subnet-a.id}"
+  vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
 
-  tags {
-    Name = "HelloWorld"
-  }
+  user_data = "${data.template_file.provision.rendered}"
+}
+
+resource "aws_lb_target_group_attachment" "rancher-a-target-433" {
+  target_group_arn = "${aws_lb_target_group.rancher-tcp-443.arn}"
+  target_id        = "${aws_instance.rancher-a.id}"
+  port             = 443
+}
+
+resource "aws_lb_target_group_attachment" "rancher-a-target-80" {
+  target_group_arn = "${aws_lb_target_group.rancher-tcp-80.arn}"
+  target_id        = "${aws_instance.rancher-a.id}"
+  port             = 80
+}
+
+resource "aws_instance" "rancher-b" {
+  instance_type     = "t3.xlarge"
+  availability_zone = "us-east-2b"
+  ami               = "${data.aws_ami.rancheros.id}"
+
+  subnet_id = "${aws_subnet.rancher-subnet-b.id}"
+  vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
+
+  iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
+
+  user_data = "${data.template_file.provision.rendered}"
+}
+
+resource "aws_lb_target_group_attachment" "rancher-b-target-433" {
+  target_group_arn = "${aws_lb_target_group.rancher-tcp-443.arn}"
+  target_id        = "${aws_instance.rancher-b.id}"
+  port             = 443
+}
+
+resource "aws_lb_target_group_attachment" "rancher-b-target-80" {
+  target_group_arn = "${aws_lb_target_group.rancher-tcp-80.arn}"
+  target_id        = "${aws_instance.rancher-b.id}"
+  port             = 80
+}
+
+resource "aws_instance" "rancher-c" {
+  instance_type     = "t3.xlarge"
+  availability_zone = "us-east-2c"
+  ami               = "${data.aws_ami.rancheros.id}"
+
+  subnet_id = "${aws_subnet.rancher-subnet-c.id}"
+  vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
+
+  iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
+
+  user_data = "${data.template_file.provision.rendered}"
+}
+
+resource "aws_lb_target_group_attachment" "rancher-c-target-433" {
+  target_group_arn = "${aws_lb_target_group.rancher-tcp-443.arn}"
+  target_id        = "${aws_instance.rancher-c.id}"
+  port             = 443
+}
+
+resource "aws_lb_target_group_attachment" "rancher-c-target-80" {
+  target_group_arn = "${aws_lb_target_group.rancher-tcp-80.arn}"
+  target_id        = "${aws_instance.rancher-c.id}"
+  port             = 80
 }

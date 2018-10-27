@@ -1,0 +1,374 @@
+resource "aws_security_group" "sg-rancher-node" {
+  name        = "sg-rancher-node"
+  description = "Allow Inbound and Outbound traffic for Rancher nodes"
+  vpc_id      = "${aws_vpc.rancher-vpc.id}"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Rancher UI/API when external SSL termination is used"
+  }
+  ingress {
+    from_port   = 433
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Rancher agent, Rancher UI/API, kubectl"
+  }  
+
+  egress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "SSH provisioning of nodes using Node Driver"
+  }
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["35.160.43.145/32","35.167.242.46/32","52.33.59.17/32"]
+    description = "git.rancher.io (catalogs)"
+  }
+  egress {
+    from_port   = 2376
+    to_port     = 2376
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Docker daemon TLS port used by Docker Machine"
+  }  
+  egress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Kubernetes apiserver"
+  }    
+}
+
+resource "aws_security_group" "sg-etcd-node" {
+  name        = "sg-etcd-node"
+  description = "Allow Inbound and Outbound traffic for etcd nodes"
+  vpc_id      = "${aws_vpc.rancher-vpc.id}"
+
+  ingress {
+    from_port   = 2376
+    to_port     = 2376
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Docker daemon TLS port used by Docker Machine"
+  }
+  ingress {
+    from_port   = 2379
+    to_port     = 2379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "etcd client requests"
+  }  
+  ingress {
+    from_port   = 2380
+    to_port     = 2380
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "etcd peer communication"
+  }  
+  ingress {
+    from_port   = 8472
+    to_port     = 8472
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel VXLAN overlay networking"
+  }  
+  ingress {
+    from_port   = 9099
+    to_port     = 9099
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel livenessProbe/readinessProbe"
+  }  
+  ingress {
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "kubelet"
+  }  
+
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Rancher agent"
+  }
+  egress {
+    from_port   = 2379
+    to_port     = 2379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "etcd client requests"
+  }
+  egress {
+    from_port   = 2380
+    to_port     = 2380
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "etcd peer communication"
+  }  
+  egress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Kubernetes apiserver"
+  }    
+  egress {
+    from_port   = 8472
+    to_port     = 8472
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel VXLAN overlay networking"
+  }      
+  egress {
+    from_port   = 9099
+    to_port     = 9099
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel livenessProbe/readinessProbe"
+  }     
+}
+
+resource "aws_security_group" "sg-controlplane-node" {
+  name        = "sg-controlplane-node"
+  description = "Allow Inbound and Outbound traffic for controlplane nodes"
+  vpc_id      = "${aws_vpc.rancher-vpc.id}"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller (HTTP)"
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller (HTTPS)"
+  }  
+  ingress {
+    from_port   = 2376
+    to_port     = 2376
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Docker daemon TLS port used by Docker Machine"
+  }  
+  ingress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Kubernetes apiserver"
+  }  
+  ingress {
+    from_port   = 8472
+    to_port     = 8472
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel VXLAN overlay networking"
+  }  
+  ingress {
+    from_port   = 9099
+    to_port     = 9099
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel livenessProbe/readinessProbe"
+  }    
+  ingress {
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "kubelet"
+  }  
+  ingress {
+    from_port   = 10254
+    to_port     = 10254
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller livenessProbe/readinessProbe"
+  }  
+  ingress {
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "NodePort port range"
+  }    
+  ingress {
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "NodePort port range"
+  }    
+
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Rancher agent"
+  }
+  egress {
+    from_port   = 2379
+    to_port     = 2379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "etcd client requests"
+  }
+  egress {
+    from_port   = 2380
+    to_port     = 2380
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "etcd peer communication"
+  }   
+  egress {
+    from_port   = 8472
+    to_port     = 8472
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel VXLAN overlay networking"
+  }        
+  egress {
+    from_port   = 9099
+    to_port     = 9099
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel livenessProbe/readinessProbe"
+  }      
+  egress {
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "kubelet"
+  }  
+  egress {
+    from_port   = 10254
+    to_port     = 10254
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller livenessProbe/readinessProbe"
+  }      
+}
+
+resource "aws_security_group" "sg-worker-node" {
+  name        = "sg-worker-node"
+  description = "Allow Inbound and Outbound traffic for worker nodes"
+  vpc_id      = "${aws_vpc.rancher-vpc.id}"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller (HTTP)"
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller (HTTPS)"
+  }  
+  ingress {
+    from_port   = 2376
+    to_port     = 2376
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Docker daemon TLS port used by Docker Machine"
+  }  
+  ingress {
+    from_port   = 8472
+    to_port     = 8472
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel VXLAN overlay networking"
+  }  
+  ingress {
+    from_port   = 9099
+    to_port     = 9099
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel livenessProbe/readinessProbe"
+  }    
+  ingress {
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "kubelet"
+  }  
+  ingress {
+    from_port   = 10254
+    to_port     = 10254
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller livenessProbe/readinessProbe"
+  }  
+  ingress {
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "NodePort port range"
+  }    
+  ingress {
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "NodePort port range"
+  }    
+
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Rancher agent"
+  }
+  egress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Kubernetes apiserver"
+  }
+  egress {
+    from_port   = 8472
+    to_port     = 8472
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel VXLAN overlay networking"
+  }        
+  egress {
+    from_port   = 9099
+    to_port     = 9099
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Canal/Flannel livenessProbe/readinessProbe"
+  }      
+  egress {
+    from_port   = 10254
+    to_port     = 10254
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Ingress controller livenessProbe/readinessProbe"
+  }      
+}
