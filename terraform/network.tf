@@ -94,7 +94,7 @@ resource "aws_lb_listener" "rancher-listener-tcp-80" {
 }
 
 resource "aws_security_group" "sg-rancher-node" {
-  name        = "sg-rancher-node"
+  name        = "rancher-node"
   description = "Allow inbound and outbound traffic for Rancher nodes"
   vpc_id      = "${aws_vpc.rancher-vpc.id}"
 
