@@ -20,7 +20,12 @@ resource "aws_subnet" "rancher-subnet-c" {
   availability_zone = "us-east-2c"
 }
 
+resource "aws_internet_gateway" "rancher-vpc-igw" {
+  vpc_id = "${aws_vpc.rancher-vpc.id}"
+}
+
 resource "aws_lb" "rancher" {
+  depends_on = ["aws_internet_gateway.rancher-vpc-igw"]
   name               = "rancher"
   internal           = false
   load_balancer_type = "network"
