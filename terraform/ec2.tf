@@ -31,6 +31,7 @@ resource "aws_instance" "rancher-a" {
   vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
+  key_name = "${aws_key_pair.aws-ue-rancher.key_name}"
 
   user_data = "${data.template_file.provision.rendered}"
 }
@@ -56,6 +57,7 @@ resource "aws_instance" "rancher-b" {
   vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
+  key_name = "${aws_key_pair.aws-ue-rancher.key_name}"
 
   user_data = "${data.template_file.provision.rendered}"
 }
@@ -81,6 +83,7 @@ resource "aws_instance" "rancher-c" {
   vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
+  key_name = "${aws_key_pair.aws-ue-rancher.key_name}"
 
   user_data = "${data.template_file.provision.rendered}"
 }
