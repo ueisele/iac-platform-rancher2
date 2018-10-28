@@ -1,0 +1,20 @@
+nodes:
+  - address: ip-10-0-3-220.us-east-2.compute.internal
+    user: rancher
+    role: [controlplane,worker,etcd]
+  - address: ip-10-0-4-11.us-east-2.compute.internal
+    user: rancher
+    role: [controlplane,worker,etcd]
+  - address: ip-10-0-5-138.us-east-2.compute.internal
+    user: rancher
+    role: [controlplane,worker,etcd]
+
+services:
+  etcd:
+    snapshot: true
+    creation: 6h
+    retention: 24h
+
+bastion_host:
+    address: ec2-18-191-124-48.us-east-2.compute.amazonaws.com
+    user: ubuntu

@@ -32,3 +32,13 @@
 
 === VPC
 * http://blog.kaliloudiaby.com/index.php/terraform-to-provision-vpc-on-aws-amazon-web-services/
+* https://docs.aws.amazon.com/de_de/vpc/latest/userguide/VPC_Internet_Gateway.html
+* https://docs.aws.amazon.com/de_de/vpc/latest/userguide/vpc-nat-gateway.html
+* https://docs.aws.amazon.com/de_de/elasticloadbalancing/latest/network/network-load-balancer-getting-started.html
+
+=== Install Kubectl and Helm
+* https://kubernetes.io/docs/tasks/tools/install-kubectl/
+* https://docs.helm.sh/using_helm/#installing-helm
+
+=== Cloud Provider
+* https://rancher.com/docs/rancher/v2.x/en/cluster-provisioning/rke-clusters/options/cloud-providers/
