@@ -1,0 +1,4 @@
+#cloud-config
+rancher:
+  docker:
+    engine: docker-17.03.2-ce

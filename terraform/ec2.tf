@@ -18,8 +18,8 @@ data "aws_ami" "rancheros" {
   owners = ["605812595337"]
 }
 
-data "template_file" "provision" {
-    template = "provision.sh"
+data "template_file" "cloud-config" {
+    template = "${file("${path.module}/cloud-config")}"
 }
 
 resource "aws_instance" "rancher-a" {
@@ -33,7 +33,7 @@ resource "aws_instance" "rancher-a" {
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
   key_name = "${aws_key_pair.aws-ue-rancher.key_name}"
 
-  user_data = "${data.template_file.provision.rendered}"
+  user_data = "${data.template_file.cloud-config.rendered}"
 }
 
 resource "aws_lb_target_group_attachment" "rancher-a-target-433" {
@@ -59,7 +59,7 @@ resource "aws_instance" "rancher-b" {
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
   key_name = "${aws_key_pair.aws-ue-rancher.key_name}"
 
-  user_data = "${data.template_file.provision.rendered}"
+  user_data = "${data.template_file.cloud-config.rendered}"
 }
 
 resource "aws_lb_target_group_attachment" "rancher-b-target-433" {
@@ -85,7 +85,7 @@ resource "aws_instance" "rancher-c" {
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
   key_name = "${aws_key_pair.aws-ue-rancher.key_name}"
 
-  user_data = "${data.template_file.provision.rendered}"
+  user_data = "${data.template_file.cloud-config.rendered}"
 }
 
 resource "aws_lb_target_group_attachment" "rancher-c-target-433" {
