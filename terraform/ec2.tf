@@ -27,7 +27,7 @@ resource "aws_instance" "rancher-a" {
   availability_zone = "us-east-2a"
   ami               = "${data.aws_ami.rancheros.id}"
 
-  subnet_id = "${aws_subnet.rancher-subnet-a.id}"
+  subnet_id = "${aws_subnet.rancher-subnet-private-a.id}"
   vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
@@ -53,7 +53,7 @@ resource "aws_instance" "rancher-b" {
   availability_zone = "us-east-2b"
   ami               = "${data.aws_ami.rancheros.id}"
 
-  subnet_id = "${aws_subnet.rancher-subnet-b.id}"
+  subnet_id = "${aws_subnet.rancher-subnet-private-b.id}"
   vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"
@@ -79,7 +79,7 @@ resource "aws_instance" "rancher-c" {
   availability_zone = "us-east-2c"
   ami               = "${data.aws_ami.rancheros.id}"
 
-  subnet_id = "${aws_subnet.rancher-subnet-c.id}"
+  subnet_id = "${aws_subnet.rancher-subnet-private-c.id}"
   vpc_security_group_ids = ["${aws_security_group.sg-rancher-node.id}"]
 
   iam_instance_profile = "${aws_iam_instance_profile.rke-aws.name}"

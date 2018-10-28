@@ -26,3 +26,9 @@
 
 === Certificates
 * https://letsencrypt.org/
+
+=== VPN
+* https://medium.freecodecamp.org/how-you-can-use-openvpn-to-safely-access-private-aws-resources-f904cd24f890
+
+=== VPC
+* http://blog.kaliloudiaby.com/index.php/terraform-to-provision-vpc-on-aws-amazon-web-services/
